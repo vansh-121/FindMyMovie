@@ -35,7 +35,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
           emit(MovieError('No results found for "${event.query}"'));
         } else {
           debugPrint('Found ${movies.length} movies for query: ${event.query}');
-          emit(MovieLoaded(movies));
+          emit(MovieLoaded(movies, isSearchResult: true));
         }
       } catch (e) {
         debugPrint('Error during search: $e');
@@ -50,6 +50,27 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
       _debounce = Timer(const Duration(milliseconds: 500), () {
         add(SearchMovies(event.query));
       });
+    });
+
+    // Add trending movies event handler
+    on<LoadTrendingMovies>((event, emit) async {
+      emit(MovieLoading());
+
+      try {
+        debugPrint('Loading trending movies');
+        final movies = await tmdbService.getTrendingMovies();
+
+        if (movies.isEmpty) {
+          debugPrint('No trending movies found');
+          emit(MovieInitial());
+        } else {
+          debugPrint('Found ${movies.length} trending movies');
+          emit(MovieLoaded(movies, isSearchResult: false));
+        }
+      } catch (e) {
+        debugPrint('Error loading trending movies: $e');
+        emit(MovieError('Failed to load trending movies: $e'));
+      }
     });
   }
 

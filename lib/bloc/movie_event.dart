@@ -10,3 +10,6 @@ class DebouncedSearchMovies extends MovieEvent {
   final String query;
   DebouncedSearchMovies(this.query);
 }
+
+// New event to load trending movies
+class LoadTrendingMovies extends MovieEvent {}

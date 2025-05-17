@@ -16,6 +16,17 @@ class TmdbService {
   // HTTP client instance to reuse connections
   final http.Client _client = http.Client();
 
+  // Method to fetch trending movies
+  Future<List<Movie>> getTrendingMovies() async {
+    final url = Uri.parse(
+      '$_baseUrl/trending/all/day?api_key=$_apiKey&language=en-US',
+    );
+
+    debugPrint('Fetching trending movies');
+
+    return _fetchMovies(url, 'trending movies');
+  }
+
   Future<List<Movie>> searchMovies(String query) async {
     if (query.isEmpty) {
       debugPrint('Empty query provided');
@@ -31,6 +42,11 @@ class TmdbService {
 
     debugPrint('Preparing to search for: "$query"');
 
+    return _fetchMovies(url, 'search for "$query"');
+  }
+
+  // Extracted common API fetch logic to avoid code duplication
+  Future<List<Movie>> _fetchMovies(Uri url, String operation) async {
     for (int attempt = 1; attempt <= _maxRetries; attempt++) {
       try {
         debugPrint('Attempt $attempt: Making API request to TMDb');
@@ -116,11 +132,11 @@ class TmdbService {
           await Future.delayed(_retryDelay * attempt);
           continue;
         }
-        throw Exception('Search failed: $e');
+        throw Exception('$operation failed: $e');
       }
     }
 
-    throw Exception('Failed to search movies after multiple attempts');
+    throw Exception('Failed to $operation after multiple attempts');
   }
 
   static String? getImageUrl(String? posterPath) {

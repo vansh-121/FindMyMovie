@@ -8,7 +8,9 @@ class MovieLoading extends MovieState {}
 
 class MovieLoaded extends MovieState {
   final List<Movie> movies;
-  MovieLoaded(this.movies);
+  final bool isSearchResult;
+
+  MovieLoaded(this.movies, {this.isSearchResult = true});
 }
 
 class MovieError extends MovieState {

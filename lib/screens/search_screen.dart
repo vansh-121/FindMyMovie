@@ -19,6 +19,15 @@ class _SearchScreenState extends State<SearchScreen> {
   bool _hasSearched = false;
 
   @override
+  void initState() {
+    super.initState();
+    // Load trending movies when the screen initializes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<MovieBloc>().add(LoadTrendingMovies());
+    });
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
@@ -60,7 +69,7 @@ class _SearchScreenState extends State<SearchScreen> {
           Expanded(
             child: BlocConsumer<MovieBloc, MovieState>(
               listener: (context, state) {
-                if (state is MovieLoaded || state is MovieError) {
+                if (state is MovieLoaded && state.isSearchResult) {
                   _hasSearched = true;
                 }
               },
@@ -72,12 +81,12 @@ class _SearchScreenState extends State<SearchScreen> {
                       children: [
                         CircularProgressIndicator(),
                         SizedBox(height: 16),
-                        Text('Searching...'),
+                        Text('Loading...'),
                       ],
                     ),
                   );
                 } else if (state is MovieLoaded) {
-                  return _buildMovieGrid(state.movies, isTablet);
+                  return _buildMovieList(state, isTablet);
                 } else if (state is MovieError) {
                   return _buildErrorView(state.message);
                 }
@@ -87,6 +96,42 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildMovieList(MovieLoaded state, bool isTablet) {
+    final header = state.isSearchResult ? 'Search Results' : 'Trending Today';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Text(
+            header,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Expanded(
+          child: GridView.builder(
+            padding: const EdgeInsets.all(16.0),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: isTablet ? 3 : 2,
+              childAspectRatio: 0.7,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemCount: state.movies.length,
+            itemBuilder: (context, index) {
+              final movie = state.movies[index];
+              return MovieCard(movie: movie);
+            },
+          ),
+        ),
+      ],
     );
   }
 
@@ -101,6 +146,13 @@ class _SearchScreenState extends State<SearchScreen> {
             const Text(
               'Search for movies or TV shows',
               style: TextStyle(fontSize: 18, color: Colors.grey),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                context.read<MovieBloc>().add(LoadTrendingMovies());
+              },
+              child: const Text('Load Trending Movies'),
             ),
           ] else ...[
             const Icon(Icons.movie_filter, size: 80, color: Colors.grey),
@@ -128,29 +180,24 @@ class _SearchScreenState extends State<SearchScreen> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () => _performSearch(_controller.text),
-            child: const Text('Try Again'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () => _performSearch(_controller.text),
+                child: const Text('Try Again'),
+              ),
+              const SizedBox(width: 16),
+              ElevatedButton(
+                onPressed: () {
+                  context.read<MovieBloc>().add(LoadTrendingMovies());
+                },
+                child: const Text('Load Trending'),
+              ),
+            ],
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildMovieGrid(List<Movie> movies, bool isTablet) {
-    return GridView.builder(
-      padding: const EdgeInsets.all(16.0),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: isTablet ? 3 : 2,
-        childAspectRatio: 0.7,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 10,
-      ),
-      itemCount: movies.length,
-      itemBuilder: (context, index) {
-        final movie = movies[index];
-        return MovieCard(movie: movie);
-      },
     );
   }
 
