@@ -41,16 +41,31 @@ class MovieScreen extends StatelessWidget {
   }
 
   Widget _buildPoster(BuildContext context, bool isTablet) {
-    return movie.posterPath != null
-        ? Image.network(
-            TmdbService.getImageUrl(movie.posterPath)!,
-            width: isTablet ? 200 : double.infinity,
-            height: isTablet ? 300 : 400,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) =>
-                const Icon(Icons.broken_image, size: 100),
-          )
-        : const Icon(Icons.movie, size: 100);
+    // If mock data is used, show a placeholder movie icon
+    if (movie.posterPath == null) {
+      return Container(
+        width: isTablet ? 200 : double.infinity,
+        height: isTablet ? 300 : 400,
+        color: Colors.grey.shade200,
+        child: const Center(
+            child: Icon(Icons.movie, size: 100, color: Colors.grey)),
+      );
+    }
+
+    // If we have a poster path, try to load the image
+    return Image.network(
+      TmdbService.getImageUrl(movie.posterPath)!,
+      width: isTablet ? 200 : double.infinity,
+      height: isTablet ? 300 : 400,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) => Container(
+        width: isTablet ? 200 : double.infinity,
+        height: isTablet ? 300 : 400,
+        color: Colors.grey.shade200,
+        child: const Center(
+            child: Icon(Icons.broken_image, size: 100, color: Colors.grey)),
+      ),
+    );
   }
 
   Widget _buildDetails(BuildContext context) {
@@ -67,6 +82,11 @@ class MovieScreen extends StatelessWidget {
             'Release Date: ${movie.releaseDate}',
             style: const TextStyle(fontSize: 16),
           ),
+        const SizedBox(height: 16),
+        const Text(
+          'Overview',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 8),
         Text(
           movie.overview,
