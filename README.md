@@ -1,16 +1,78 @@
-# movie_search_app
+# 🎬 FindMyMovie — Discover Movies Like Never Before
 
-A new Flutter project.
+[![Build](https://img.shields.io/github/actions/workflow/status/vansh-121/FindMyMovie/flutter.yml?label=build&logo=githubactions&style=for-the-badge)](https://github.com/vansh-121/FindMyMovie/actions)
+[![License](https://img.shields.io/github/license/vansh-121/FindMyMovie?style=for-the-badge)](LICENSE)
+[![Last Commit](https://img.shields.io/github/last-commit/vansh-121/FindMyMovie?style=for-the-badge)](https://github.com/vansh-121/FindMyMovie/commits)
+[![Platform](https://img.shields.io/badge/platform-Flutter-blue?style=for-the-badge&logo=flutter)](https://flutter.dev)
+[![Pub Version](https://img.shields.io/pub/v/flutter_bloc?style=for-the-badge)](https://pub.dev/packages/flutter_bloc)
 
-## Getting Started
+> A sleek and responsive Flutter app to search and explore movies using the TMDb API. Built with BLoC/Cubit for efficient state management.
 
-This project is a starting point for a Flutter application.
+---
 
-A few resources to get you started if this is your first Flutter project:
+## 📱 Preview
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+| Home | Search | Movie Detail |
+|------|--------|--------------|
+| ![Home Screen](screenshots/home.png) | ![Search](screenshots/search.png) | ![Movie Detail](screenshots/detail.png) |
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## ✨ Features
+
+- 🔍 **Search** movies by title using [TMDb API](https://www.themoviedb.org/documentation/api)
+- ⚙️ **BLoC/Cubit** architecture for clean and scalable code
+- 📱 Fully **responsive UI** across devices
+- 🧩 **Error handling** for a smooth user experience
+- 🌙 Light & Dark mode support (customizable)
+- 📡 Optimized network handling
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repo
+
+```bash
+git clone https://github.com/vansh-121/FindMyMovie.git
+cd FindMyMovie
+```
+
+### 2.Install dependencies
+
+```bash
+flutter pub get
+```
+
+### 3. Add your TMDb API key
+
+```bash
+const String apiKey = 'your_api_key';
+```
+👉 Get your API key from TMDb Developer Portal
+
+
+### 4. Run the app
+
+```bash
+flutter run
+```
+
+
+---
+
+
+## Project Structure :-
+
+```bash
+lib/
+├── bloc/            # BLoC & Cubit files
+├── models/          # Data models
+├── repository/      # API services and logic
+├── screens/         # UI screens
+├── widgets/         # Reusable widgets
+└── main.dart        # Entry point
+```
+---
+
+#### Made with ❤️ by Vansh
