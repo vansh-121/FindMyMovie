@@ -14,10 +14,22 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Movie Search App',
+      title: 'FindMyMovie',
+      // Use system theme mode to follow the device settings
+      themeMode: ThemeMode.system,
+      // Light theme configuration
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
+        brightness: Brightness.light,
+        // Add any other light theme customizations here
+      ),
+      // Dark theme configuration
+      darkTheme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        brightness: Brightness.dark,
+        // Add any other dark theme customizations here
       ),
       home: BlocProvider(
         create: (context) => MovieBloc(tmdbService: TmdbService()),

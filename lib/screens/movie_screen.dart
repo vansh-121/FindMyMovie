@@ -11,6 +11,31 @@ class MovieScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final isTablet = size.width > 600;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    // Define gradient colors based on theme
+    final List<Color> gradientColors = isDarkMode
+        ? [
+            Colors.black,
+            const Color(0xFF101010),
+            const Color(0xFF101010),
+          ]
+        : [
+            Colors.white,
+            const Color(0xFFF5F5F5),
+            const Color(0xFFF5F5F5),
+          ];
+
+    // Define text colors based on theme
+    final Color primaryTextColor = isDarkMode ? Colors.white : Colors.black;
+    final Color secondaryTextColor =
+        isDarkMode ? Colors.grey.shade300 : Colors.grey.shade700;
+    final Color iconButtonColor =
+        isDarkMode ? Colors.grey.shade800 : Colors.grey.shade200;
+    final Color borderColor =
+        isDarkMode ? Colors.grey.shade600 : Colors.grey.shade400;
+    final Color chipColor =
+        isDarkMode ? Colors.grey.shade800 : Colors.grey.shade200;
 
     return Scaffold(
       body: Stack(
@@ -19,15 +44,11 @@ class MovieScreen extends StatelessWidget {
           Container(
             width: double.infinity,
             height: double.infinity,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
-                  Colors.black,
-                  Color(0xFF101010),
-                  Color(0xFF101010),
-                ],
+                colors: gradientColors,
               ),
             ),
           ),
@@ -40,8 +61,8 @@ class MovieScreen extends StatelessWidget {
                 // Movie Poster Section with Backdrop
                 Stack(
                   children: [
-                    // Backdrop with dark overlay
-                    _buildPosterBackdrop(size),
+                    // Backdrop with overlay
+                    _buildPosterBackdrop(size, isDarkMode),
 
                     // Content Stack (back button, poster, age rating)
                     Column(
@@ -59,12 +80,14 @@ class MovieScreen extends StatelessWidget {
                                   child: Container(
                                     padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
-                                      color: Colors.black.withOpacity(0.5),
+                                      color: isDarkMode
+                                          ? Colors.black.withOpacity(0.5)
+                                          : Colors.white.withOpacity(0.5),
                                       borderRadius: BorderRadius.circular(8),
                                     ),
-                                    child: const Icon(
+                                    child: Icon(
                                       Icons.arrow_back,
-                                      color: Colors.white,
+                                      color: primaryTextColor,
                                     ),
                                   ),
                                 ),
@@ -73,12 +96,14 @@ class MovieScreen extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.5),
+                                    color: isDarkMode
+                                        ? Colors.black.withOpacity(0.5)
+                                        : Colors.white.withOpacity(0.5),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
-                                  child: const Icon(
+                                  child: Icon(
                                     Icons.bookmark_border,
-                                    color: Colors.white,
+                                    color: primaryTextColor,
                                   ),
                                 ),
                               ],
@@ -109,10 +134,10 @@ class MovieScreen extends StatelessWidget {
                       Center(
                         child: Text(
                           movie.title,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: primaryTextColor,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -121,22 +146,25 @@ class MovieScreen extends StatelessWidget {
                       const SizedBox(height: 16),
 
                       // Rating and Year Row
-                      _buildInfoRow(),
+                      _buildInfoRow(
+                          primaryTextColor, secondaryTextColor, borderColor),
 
                       const SizedBox(height: 24),
 
                       // Action Buttons
-                      _buildActionButtons(),
+                      _buildActionButtons(
+                          isDarkMode, iconButtonColor, secondaryTextColor),
 
                       const SizedBox(height: 24),
 
                       // Overview Section
-                      _buildOverviewSection(),
+                      _buildOverviewSection(
+                          primaryTextColor, secondaryTextColor, chipColor),
 
                       const SizedBox(height: 24),
 
                       // Cast Section (Placeholder)
-                      _buildCastSection(),
+                      _buildCastSection(primaryTextColor, secondaryTextColor),
                     ],
                   ),
                 ),
@@ -149,7 +177,22 @@ class MovieScreen extends StatelessWidget {
   }
 
   // Poster backdrop with gradient overlay
-  Widget _buildPosterBackdrop(Size size) {
+  Widget _buildPosterBackdrop(Size size, bool isDarkMode) {
+    final Color overlayColor = isDarkMode ? Colors.black : Colors.white;
+    final List<Color> gradientColors = isDarkMode
+        ? [
+            Colors.transparent,
+            Colors.transparent,
+            Colors.black.withOpacity(0.8),
+            Colors.black,
+          ]
+        : [
+            Colors.transparent,
+            Colors.transparent,
+            Colors.white.withOpacity(0.8),
+            Colors.white,
+          ];
+
     return Container(
       width: double.infinity,
       height: size.height * 0.5,
@@ -162,12 +205,12 @@ class MovieScreen extends StatelessWidget {
                 ),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.65),
+                  overlayColor.withOpacity(0.65),
                   BlendMode.darken,
                 ),
               )
             : null,
-        color: Colors.black,
+        color: isDarkMode ? Colors.black : Colors.white,
       ),
       // Bottom gradient for smoother transition
       child: Container(
@@ -175,12 +218,7 @@ class MovieScreen extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Colors.transparent,
-              Colors.transparent,
-              Colors.black.withOpacity(0.8),
-              Colors.black,
-            ],
+            colors: gradientColors,
             stops: const [0.0, 0.5, 0.8, 1.0],
           ),
         ),
@@ -231,7 +269,8 @@ class MovieScreen extends StatelessWidget {
   }
 
   // Info row with year, rating, runtime
-  Widget _buildInfoRow() {
+  Widget _buildInfoRow(
+      Color textColor, Color secondaryTextColor, Color borderColor) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -241,40 +280,40 @@ class MovieScreen extends StatelessWidget {
             movie.releaseDate!.substring(0, 4),
             style: TextStyle(
               fontSize: 16,
-              color: Colors.grey.shade300,
+              color: secondaryTextColor,
             ),
           ),
-          _buildDot(),
+          _buildDot(borderColor),
         ],
 
         // Age Rating (16+)
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade600),
+            border: Border.all(color: borderColor),
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(
             '16+',
             style: TextStyle(
-              color: Colors.grey.shade300,
+              color: secondaryTextColor,
               fontSize: 14,
             ),
           ),
         ),
 
-        _buildDot(),
+        _buildDot(borderColor),
 
         // HD Quality
         Text(
           'HD',
           style: TextStyle(
             fontSize: 16,
-            color: Colors.grey.shade300,
+            color: secondaryTextColor,
           ),
         ),
 
-        _buildDot(),
+        _buildDot(borderColor),
 
         // IMDB Rating
         Row(
@@ -285,20 +324,20 @@ class MovieScreen extends StatelessWidget {
               '7.4',
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.grey.shade300,
+                color: secondaryTextColor,
               ),
             ),
           ],
         ),
 
-        _buildDot(),
+        _buildDot(borderColor),
 
         // CC (Closed Captioning)
         Text(
           'CC',
           style: TextStyle(
             fontSize: 16,
-            color: Colors.grey.shade300,
+            color: secondaryTextColor,
           ),
         ),
       ],
@@ -306,13 +345,13 @@ class MovieScreen extends StatelessWidget {
   }
 
   // Small dot separator
-  Widget _buildDot() {
+  Widget _buildDot(Color color) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Text(
         '•',
         style: TextStyle(
-          color: Colors.grey.shade600,
+          color: color,
           fontSize: 16,
         ),
       ),
@@ -320,7 +359,8 @@ class MovieScreen extends StatelessWidget {
   }
 
   // Action buttons (Play, Trailer, Download)
-  Widget _buildActionButtons() {
+  Widget _buildActionButtons(
+      bool isDarkMode, Color iconButtonColor, Color labelColor) {
     return Row(
       children: [
         // Play Button
@@ -343,25 +383,28 @@ class MovieScreen extends StatelessWidget {
         const SizedBox(width: 12),
 
         // Trailer Button
-        _buildIconButton(Icons.slideshow, 'Trailer'),
+        _buildIconButton(
+            Icons.slideshow, 'Trailer', iconButtonColor, labelColor),
 
         const SizedBox(width: 12),
 
         // Download Button
-        _buildIconButton(Icons.download, 'Download'),
+        _buildIconButton(
+            Icons.download, 'Download', iconButtonColor, labelColor),
       ],
     );
   }
 
   // Icon button with label
-  Widget _buildIconButton(IconData icon, String label) {
+  Widget _buildIconButton(
+      IconData icon, String label, Color iconButtonColor, Color labelColor) {
     return Column(
       children: [
         Container(
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            color: Colors.grey.shade800,
+            color: iconButtonColor,
             borderRadius: BorderRadius.circular(24),
           ),
           child: Icon(
@@ -373,7 +416,7 @@ class MovieScreen extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            color: Colors.grey.shade400,
+            color: labelColor,
             fontSize: 12,
           ),
         ),
@@ -382,16 +425,17 @@ class MovieScreen extends StatelessWidget {
   }
 
   // Overview section
-  Widget _buildOverviewSection() {
+  Widget _buildOverviewSection(
+      Color titleColor, Color textColor, Color chipColor) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Overview',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: titleColor,
           ),
         ),
         const SizedBox(height: 8),
@@ -399,7 +443,7 @@ class MovieScreen extends StatelessWidget {
           movie.overview,
           style: TextStyle(
             fontSize: 16,
-            color: Colors.grey.shade300,
+            color: textColor,
             height: 1.5,
           ),
         ),
@@ -407,9 +451,9 @@ class MovieScreen extends StatelessWidget {
         Wrap(
           spacing: 8,
           children: [
-            _buildGenreChip('Action'),
-            _buildGenreChip('Thriller'),
-            _buildGenreChip('Crime'),
+            _buildGenreChip('Action', chipColor),
+            _buildGenreChip('Thriller', chipColor),
+            _buildGenreChip('Crime', chipColor),
           ],
         ),
       ],
@@ -417,30 +461,30 @@ class MovieScreen extends StatelessWidget {
   }
 
   // Genre chips
-  Widget _buildGenreChip(String genre) {
+  Widget _buildGenreChip(String genre, Color chipColor) {
     return Chip(
       label: Text(genre),
       labelStyle: const TextStyle(
         color: Colors.white,
         fontSize: 12,
       ),
-      backgroundColor: Colors.grey.shade800,
+      backgroundColor: chipColor,
       padding: const EdgeInsets.symmetric(horizontal: 8),
       visualDensity: VisualDensity.compact,
     );
   }
 
   // Cast section (placeholder)
-  Widget _buildCastSection() {
+  Widget _buildCastSection(Color titleColor, Color textColor) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Starring',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: titleColor,
           ),
         ),
         const SizedBox(height: 8),
@@ -448,25 +492,25 @@ class MovieScreen extends StatelessWidget {
           'Denzel Washington, Dakota Fanning, Eugenio Mastrandrea, David Denman, Gaia Scodellaro',
           style: TextStyle(
             fontSize: 16,
-            color: Colors.grey.shade300,
+            color: textColor,
           ),
         ),
         const SizedBox(height: 16),
         Row(
           children: [
-            const Text(
+            Text(
               'Creator: ',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: titleColor,
               ),
             ),
             Text(
               'Antoine Fuqua, Richard Wenk',
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.grey.shade300,
+                color: textColor,
               ),
             ),
           ],

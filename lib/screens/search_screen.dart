@@ -36,10 +36,12 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     final isTablet = MediaQuery.of(context).size.width > 600;
+    // Determine if we're in dark mode
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Movie Search'),
+        title: const Text('FindMyMovie'),
       ),
       body: Column(
         children: [
@@ -90,7 +92,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 } else if (state is MovieError) {
                   return _buildErrorView(state.message);
                 }
-                return _buildInitialView();
+                return _buildInitialView(isDarkMode);
               },
             ),
           ),
@@ -135,17 +137,20 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-  Widget _buildInitialView() {
+  Widget _buildInitialView(bool isDarkMode) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (!_hasSearched) ...[
-            const Icon(Icons.search, size: 80, color: Colors.grey),
+            Icon(Icons.search,
+                size: 80, color: isDarkMode ? Colors.white70 : Colors.grey),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Search for movies or TV shows',
-              style: TextStyle(fontSize: 18, color: Colors.grey),
+              style: TextStyle(
+                  fontSize: 18,
+                  color: isDarkMode ? Colors.white70 : Colors.grey),
             ),
             const SizedBox(height: 24),
             ElevatedButton(
@@ -155,11 +160,14 @@ class _SearchScreenState extends State<SearchScreen> {
               child: const Text('Load Trending Movies'),
             ),
           ] else ...[
-            const Icon(Icons.movie_filter, size: 80, color: Colors.grey),
+            Icon(Icons.movie_filter,
+                size: 80, color: isDarkMode ? Colors.white70 : Colors.grey),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'No results to display',
-              style: TextStyle(fontSize: 18, color: Colors.grey),
+              style: TextStyle(
+                  fontSize: 18,
+                  color: isDarkMode ? Colors.white70 : Colors.grey),
             ),
           ]
         ],
@@ -241,8 +249,10 @@ class MovieCard extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 movie.title,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
