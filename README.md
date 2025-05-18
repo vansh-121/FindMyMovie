@@ -25,7 +25,7 @@ https://github.com/user-attachments/assets/f0daeb32-d013-48c9-bc55-2ba00fba329c
 ### 🏠 Home Screen
 <p float="left">
   <img src="screenshots/home_portrait.jpg" width="200"/>
-  <img src="screenshots/home_landscape.png" width="350"/>
+  <img src="screenshots/home_landscape.jpg" width="350"/>
 </p>
 
 ### 🔍 Search Screen
@@ -37,7 +37,7 @@ https://github.com/user-attachments/assets/f0daeb32-d013-48c9-bc55-2ba00fba329c
 ### 🎥 Movie Detail Screen
 <p float="left">
   <img src="screenshots/detail_portrait.jpg" width="200"/>
-  <img src="screenshots/detail_landscape.png" width="350"/>
+  <img src="screenshots/detail_landscape.jpg" width="350"/>
 </p>
 
 
