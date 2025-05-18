@@ -6,15 +6,40 @@
 [![Platform](https://img.shields.io/badge/platform-Flutter-blue?style=for-the-badge&logo=flutter)](https://flutter.dev)
 [![Pub Version](https://img.shields.io/pub/v/flutter_bloc?style=for-the-badge)](https://pub.dev/packages/flutter_bloc)
 
-> A sleek and responsive Flutter app to search and explore movies using the TMDb API. Built with BLoC/Cubit for efficient state management.
+FindMyMovie is a sleek, responsive Flutter app that allows users to search for movies using the [TMDb API](https://www.themoviedb.org/documentation/api). It delivers fast and accurate results, displaying movie posters, titles, release dates, and brief overviews in a visually appealing interface.
+
+> 🔍 Built with Flutter, BLoC/Cubit for state management, and incorporates API integration, error handling, and responsive UI.
 
 ---
 
-## 📱 Preview
+## 🧪 Demo
 
-| Home | Search | Movie Detail |
-|------|--------|--------------|
-| ![Home Screen](screenshots/home.png) | ![Search](screenshots/search.png) | ![Movie Detail](screenshots/detail.png) |
+### 📽️ Video Demo
+
+
+https://github.com/user-attachments/assets/f0daeb32-d013-48c9-bc55-2ba00fba329c
+
+
+### 🖼️ Screenshots
+
+### 🏠 Home Screen
+<p float="left">
+  <img src="screenshots/home_portrait.png" width="200"/>
+  <img src="screenshots/home_landscape.png" width="350"/>
+</p>
+
+### 🔍 Search Screen
+<p float="left">
+  <img src="screenshots/search_portrait.png" width="200"/>
+  <img src="screenshots/search_landscape.png" width="350"/>
+</p>
+
+### 🎥 Movie Detail Screen
+<p float="left">
+  <img src="screenshots/detail_portrait.png" width="200"/>
+  <img src="screenshots/detail_landscape.png" width="350"/>
+</p>
+
 
 ---
 
