@@ -31,7 +31,7 @@ https://github.com/user-attachments/assets/f0daeb32-d013-48c9-bc55-2ba00fba329c
 ### 🔍 Search Screen
 <p float="left">
   <img src="screenshots/search_portrait.jpg" width="200"/>
-  <img src="screenshots/search_landscape.png" width="350"/>
+  <img src="screenshots/search_landscape.jpg" width="350"/>
 </p>
 
 ### 🎥 Movie Detail Screen
