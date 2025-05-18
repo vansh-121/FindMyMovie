@@ -1,6 +1,5 @@
 # 🎬 FindMyMovie — Discover Movies Like Never Before
 
-[![Build](https://img.shields.io/github/actions/workflow/status/vansh-121/FindMyMovie/flutter.yml?label=build&logo=githubactions&style=for-the-badge)](https://github.com/vansh-121/FindMyMovie/actions)
 [![License](https://img.shields.io/github/license/vansh-121/FindMyMovie?style=for-the-badge)](LICENSE)
 [![Last Commit](https://img.shields.io/github/last-commit/vansh-121/FindMyMovie?style=for-the-badge)](https://github.com/vansh-121/FindMyMovie/commits)
 [![Platform](https://img.shields.io/badge/platform-Flutter-blue?style=for-the-badge&logo=flutter)](https://flutter.dev)
